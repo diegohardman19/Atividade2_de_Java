@@ -1,68 +1,75 @@
-import java.util.Scanner;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Situação do Aluno</title>
+</head>
+<body>
+  <h1>Situação Final do Aluno</h1>
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+  <form id="formulario">
+    <label for="aulas">Número de aulas do semestre:</label><br>
+    <input type="number" id="aulas" required><br><br>
 
-        // Entrada de dados
-        System.out.print("Número de aulas do semestre: ");
-        int numAulas = sc.nextInt();
+    <label for="faltas">Número de faltas do aluno:</label><br>
+    <input type="number" id="faltas" required><br><br>
 
-        System.out.print("Número de faltas do aluno: ");
-        int faltas = sc.nextInt();
+    <label for="p1">Primeira nota (P1):</label><br>
+    <input type="number" step="0.01" id="p1" required><br><br>
 
-        System.out.print("Primeira nota (P1): ");
-        double p1 = sc.nextDouble();
+    <label for="p2">Segunda nota (P2):</label><br>
+    <input type="number" step="0.01" id="p2" required><br><br>
 
-        System.out.print("Segunda nota (P2): ");
-        double p2 = sc.nextDouble();
+    <label for="recuperacao">Nota da recuperação (se necessário):</label><br>
+    <input type="number" step="0.01" id="recuperacao"><br><br>
 
-        // Cálculo da frequência
-        double percentualPresenca = ((double)(numAulas - faltas) / numAulas) * 100;
+    <button type="submit">Calcular Situação</button>
+  </form>
 
-        String situacao;
-        Double notaRecuperacao = null;
+  <div id="resultado"></div>
 
-        // Verificação da frequência mínima
-        if (percentualPresenca < 75) {
-            situacao = "Reprovado por falta";
+  <script>
+    document.getElementById("formulario").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const aulas = parseInt(document.getElementById("aulas").value);
+      const faltas = parseInt(document.getElementById("faltas").value);
+      const p1 = parseFloat(document.getElementById("p1").value);
+      const p2 = parseFloat(document.getElementById("p2").value);
+      const recuperacaoInput = document.getElementById("recuperacao").value;
+
+      const presenca = ((aulas - faltas) / aulas) * 100;
+      const media = (p1 + p2) / 2;
+
+      let situacao = "";
+      let notaRecuperacao = null;
+
+      if (presenca < 75) {
+        situacao = "❌ Reprovado por falta";
+      } else if (media >= 7) {
+        situacao = "✅ Aprovado";
+      } else if (media >= 5) {
+        notaRecuperacao = parseFloat(recuperacaoInput);
+        const mediaFinal = (media + notaRecuperacao) / 2;
+
+        if (mediaFinal >= 5) {
+          situacao = "✅ Aprovado na recuperação";
         } else {
-            // Cálculo da média
-            double media = (p1 + p2) / 2;
-
-            if (media >= 7.0) {
-                situacao = "Aprovado";
-            } else if (media >= 5.0) {
-                // Recuperação
-                System.out.print("Nota da recuperação: ");
-                notaRecuperacao = sc.nextDouble();
-
-                double mediaFinal = (media + notaRecuperacao) / 2;
-
-                if (mediaFinal >= 5.0) {
-                    situacao = "Aprovado na recuperação";
-                } else {
-                    situacao = "Reprovado na recuperação";
-                }
-            } else {
-                situacao = "Reprovado por nota";
-            }
+          situacao = "❌ Reprovado na recuperação";
         }
+      } else {
+        situacao = "❌ Reprovado por nota";
+      }
 
-        // Saída de dados
-        System.out.println("\n--- Resultado Final ---");
-        System.out.println("Número de aulas do semestre: " + numAulas);
-        System.out.println("Número de faltas do aluno: " + faltas);
-        System.out.printf("Percentual de presença do aluno: %.2f%%\n", percentualPresenca);
-        System.out.println("A primeira nota: " + p1);
-        System.out.println("Segunda nota: " + p2);
-        if (notaRecuperacao != null) {
-            System.out.println("Nota complementar (recuperação): " + notaRecuperacao);
-        } else {
-            System.out.println("Nota complementar (recuperação): Não se aplica");
-        }
-        System.out.println("Situação final do aluno: " + situacao);
+      document.getElementById("resultado").innerHTML = `
+        <h2>Resultado Final</h2>
+        <p><strong>Presença:</strong> ${presenca.toFixed(2)}%</p>
+        <p><strong>Média:</strong> ${media.toFixed(2)}</p>
+        ${notaRecuperacao !== null ? `<p><strong>Recuperação:</strong> ${notaRecuperacao.toFixed(2)}</p>` : ""}
+        <p><strong>Situação:</strong> ${situacao}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
 
-        sc.close();
-    }
-}
