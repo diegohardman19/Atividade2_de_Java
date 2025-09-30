@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Número de aulas do semestre: ");
+        int numAulas = sc.nextInt();
+
+        System.out.print("Número de faltas do aluno: ");
+        int faltas = sc.nextInt();
+
+        System.out.print("Primeira nota (P1): ");
+        double p1 = sc.nextDouble();
+
+        System.out.print("Segunda nota (P2): ");
+        double p2 = sc.nextDouble();
+
+        // Cálculo da frequência
+        double percentualPresenca = ((double)(numAulas - faltas) / numAulas) * 100;
+
+        String situacao;
+        Double notaRecuperacao = null;
+
+        // Verificação da frequência mínima
+        if (percentualPresenca < 75) {
+            situacao = "Reprovado por falta";
+        } else {
+            // Cálculo da média
+            double media = (p1 + p2) / 2;
+
+            if (media >= 7.0) {
+                situacao = "Aprovado";
+            } else if (media >= 5.0) {
+                // Recuperação
+                System.out.print("Nota da recuperação: ");
+                notaRecuperacao = sc.nextDouble();
+
+                double mediaFinal = (media + notaRecuperacao) / 2;
+
+                if (mediaFinal >= 5.0) {
+                    situacao = "Aprovado na recuperação";
+                } else {
+                    situacao = "Reprovado na recuperação";
+                }
+            } else {
+                situacao = "Reprovado por nota";
+            }
+        }
+
+        // Saída de dados
+        System.out.println("\n--- Resultado Final ---");
+        System.out.println("Número de aulas do semestre: " + numAulas);
+        System.out.println("Número de faltas do aluno: " + faltas);
+        System.out.printf("Percentual de presença do aluno: %.2f%%\n", percentualPresenca);
+        System.out.println("A primeira nota: " + p1);
+        System.out.println("Segunda nota: " + p2);
+        if (notaRecuperacao != null) {
+            System.out.println("Nota complementar (recuperação): " + notaRecuperacao);
+        } else {
+            System.out.println("Nota complementar (recuperação): Não se aplica");
+        }
+        System.out.println("Situação final do aluno: " + situacao);
+
+        sc.close();
+    }
+}
