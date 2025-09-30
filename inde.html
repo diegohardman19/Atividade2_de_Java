@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Situação do Aluno</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Situação Final do Aluno</h1>
+    <form id="formulario">
+      <label for="aulas">Número de aulas do semestre:</label>
+      <input type="number" id="aulas" required>
+
+      <label for="faltas">Número de faltas do aluno:</label>
+      <input type="number" id="faltas" required>
+
+      <label for="p1">Primeira nota (P1):</label>
+      <input type="number" step="0.01" id="p1" required>
+
+      <label for="p2">Segunda nota (P2):</label>
+      <input type="number" step="0.01" id="p2" required>
+
+      <label for="recuperacao">Nota da recuperação (se necessário):</label>
+      <input type="number" step="0.01" id="recuperacao">
+
+      <button type="submit">Calcular Situação</button>
+    </form>
+
+    <div id="resultado" class="resultado" style="display: none;"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
